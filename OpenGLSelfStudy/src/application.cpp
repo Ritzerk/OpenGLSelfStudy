@@ -75,14 +75,24 @@ int main(void)
 		-0.5f,  0.5f, 0.0f		//top left
 	};
 
+	float triangleVertices1[] = {
+		-0.50f, 0.0f, 0.0f,
+		-0.25f, 0.5f, 0.0f,
+		 0.00f, 0.0f, 0.0f	
+	};
+
+	float triangleVertices2[] = {
+		0.0f, 0.0f, 0.0f,
+		0.25f, 0.5f, 0.0f,
+		0.5f, 0.0f, 0.0f
+	};
+
 	unsigned int indices[] = {
 		0, 1, 3,	//first triangle
 		1, 2, 3		//second triangle
 	};
 
-	
-
-	unsigned int VBO, VAO, EBO;
+	/*unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -101,8 +111,30 @@ int main(void)
 	glEnableVertexAttribArray(0);					//this registers the currently bound VBO as the vertex attribute's bound vertex buffer object. 
 
 	//You can safely unbind VAO and VBO after the instruction before this one. You don't need to, but can. Then rebind it whenever you're using this VAO.
-	//glBindVertexArray(0);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);				
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);*/
+
+	//Exercise 1 - With two different VBOs, we can have 1 VAO but need to swap what is bound to it.
+	unsigned int aVBO[2], VAO2;
+	glGenVertexArrays(1, &VAO2);
+	glGenBuffers(2, aVBO);
+
+	glBindVertexArray(VAO2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, aVBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices1), triangleVertices1, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, aVBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices2), triangleVertices2, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	
+	
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -112,18 +144,31 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
 		glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		// glDrawArrays(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);	//To use VBO instead... have to change the triangle vertex first.
+
+		//Exercise 1 - Drawing two triangles next to each other. Method 1: Changing VBO bound to VAO.
+		glBindVertexArray(VAO2);
+
+		glBindBuffer(GL_ARRAY_BUFFER, aVBO[0]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindBuffer(GL_ARRAY_BUFFER, aVBO[1]);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	//Clear up
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
+	//glDeleteVertexArrays(1, &VAO);
+	//glDeleteBuffers(1, &VBO);
+	//glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
