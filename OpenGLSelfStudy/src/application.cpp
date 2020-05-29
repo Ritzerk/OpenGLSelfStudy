@@ -69,19 +69,32 @@ int main(void)
 	glDeleteShader(fragmentShader);
 
 	float triangleVertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+		 0.5f,  0.5f, 0.0f,		//top right
+		 0.5f, -0.5f, 0.0f,		//bottom right
+		-0.5f, -0.5f, 0.0f,		//bottom left
+		-0.5f,  0.5f, 0.0f		//top left
 	};
 
-	unsigned int VBO, VAO;
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
+	unsigned int indices[] = {
+		0, 1, 3,	//first triangle
+		1, 2, 3		//second triangle
+	};
 
-	glBindVertexArray(VAO);
+	
+
+	unsigned int VBO, VAO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);		//bind VAO first
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
+
+	//an element buffer enables us to reuse our vertices if they have the same cooridinates when drawing shapes. 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	//Next, need to tell opengl how to interpret the vertex data in memory and how it should connect the vertex data to the vertex shader's attributes.
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
@@ -99,7 +112,9 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
 		glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		
+		// glDrawArrays(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);	//To use VBO instead... have to change the triangle vertex first.
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -108,6 +123,7 @@ int main(void)
 	//Clear up
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	glfwTerminate();
