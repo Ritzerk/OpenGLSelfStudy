@@ -69,16 +69,17 @@ int main(void)
 	glDeleteShader(fragmentShader);
 
 	float triangleVertices[] = {
-		-0.50f, 0.0f, 0.0f,
-		-0.25f, 0.5f, 0.0f,
-		 0.00f, 0.0f, 0.0f,
-		 0.25f, 0.5f, 0.0f,
-		 0.50f, 0.0f, 0.0f
+		-0.6f, 0.0f, 0.0f,
+		-0.35f, 0.5f, 0.0f,
+		-0.1f, 0.0f, 0.0f,
+		 0.1f, 0.0f, 0.0f,
+		 0.35f, 0.5f, 0.0f,
+		 0.60f, 0.0f, 0.0f
 	};
 
 	unsigned int indices[] = {
 		0,1,2,
-		2,3,4
+		3,4,5
 	};
 
 
