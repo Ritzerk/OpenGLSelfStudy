@@ -45,6 +45,13 @@ int main(void)
 		"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 		"}\0";
 
+	const char* fragmentShaderSourceYellow = "#version 430 core\n"
+		"out vec4 FragColor;\n"
+		"void main()\n"
+		"{\n"
+		"FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+		"}\0";
+
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -55,13 +62,22 @@ int main(void)
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
+	unsigned int shaderProgramOrange, shaderProgramYellow;
+	shaderProgramOrange = glCreateProgram();
+	shaderProgramYellow = glCreateProgram();
 
 	//Attaching shaders to program
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
+	glAttachShader(shaderProgramOrange, vertexShader);
+	glAttachShader(shaderProgramOrange, fragmentShader);
+	glLinkProgram(shaderProgramOrange);
+
+	//Now link the extra yellow shader, by overwriting the current fragment shader and then attaching the shader to the yellow program. 
+	glShaderSource(fragmentShader, 1, &fragmentShaderSourceYellow, NULL);
+	glCompileShader(fragmentShader);
+
+	glAttachShader(shaderProgramYellow, vertexShader);
+	glAttachShader(shaderProgramYellow, fragmentShader);
+	glLinkProgram(shaderProgramYellow);
 
 
 	//Can delete shader objects after they are linked
@@ -112,15 +128,17 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
-		glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
+		glUseProgram(shaderProgramOrange);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
 
-		//Exercise 1 - Drawing two triangles next to each other. Method: Two different VAOs and VBOs
+		//Exercise 3: One orange and one yellow triangle.
 		glBindVertexArray(VAO[0]);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glBindVertexArray(0);
+
+		glUseProgram(shaderProgramYellow);
 
 		glBindVertexArray(VAO[1]);
 
@@ -129,8 +147,6 @@ int main(void)
 
 		glBindVertexArray(0);
 
-
-
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -138,7 +154,8 @@ int main(void)
 	//Clear up
 	glDeleteVertexArrays(1, VAO);
 	glDeleteBuffers(1, VBO);
-	glDeleteProgram(shaderProgram);
+	glDeleteProgram(shaderProgramOrange);
+	glDeleteProgram(shaderProgramYellow);
 
 	glfwTerminate();
 	return 0; 
