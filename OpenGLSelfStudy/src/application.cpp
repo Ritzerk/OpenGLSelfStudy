@@ -32,7 +32,7 @@ int main(void)
 	glfwSetFramebufferSizeCallback(window, adjustViewportToWindowSize);		//Viewport needs to be resized everytime user resizes window, this is done using a callback. 
 
 	const char* vertexShaderSource = "#version 430 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
+		"layout (location = 0) in vec3 aPos;\n"								//this line sets the generic attribute index (attribindex/generic vertex attribute), which we use when binding and so on. 
 		"void main()\n"
 		"{\n"
 		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
@@ -86,8 +86,8 @@ int main(void)
 	
 
 	glBindVertexArray(VAO2);
-	glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);		//format setup without a buffer
-	glVertexAttribBinding(0, 0);
+	glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);					//format setup without a buffer, parameters: attribindex,size,type,normalized,relativeoffset.
+	glVertexAttribBinding(0, 0);										// attribindex and bindinindex. attribindex decided on location in shader, and bindingindex decided on glVertexBuffer call no.
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
