@@ -88,6 +88,7 @@ int main(void)
 	glBindVertexArray(VAO2);
 	glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);		//format setup without a buffer
 	glVertexAttribBinding(0, 0);
+	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
 	//Bind Buffers to data next
