@@ -33,23 +33,19 @@ int main(void)
 
 	const char* vertexShaderSource = "#version 430 core\n"
 		"layout (location = 0) in vec3 aPos;\n"								//this line sets the generic attribute index (attribindex/generic vertex attribute), which we use when binding and so on. 
+		"out vec4 vertexColor;\n"
 		"void main()\n"
 		"{\n"
 		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"	vertexColor = vec4(0.5, 0.0, 0.0, 1.0);\n"
 		"}\0";
 
 	const char* fragmentShaderSource = "#version 430 core\n"
 		"out vec4 FragColor;\n"
+		"in vec4 vertexColor;\n"
 		"void main()\n"
 		"{\n"
-		"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}\0";
-
-	const char* fragmentShaderSourceYellow = "#version 430 core\n"
-		"out vec4 FragColor;\n"
-		"void main()\n"
-		"{\n"
-		"FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+		"FragColor = vertexColor;\n"
 		"}\0";
 
 	unsigned int vertexShader;
@@ -62,64 +58,38 @@ int main(void)
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
-	unsigned int shaderProgramOrange, shaderProgramYellow;
+	unsigned int shaderProgramOrange;
 	shaderProgramOrange = glCreateProgram();
-	shaderProgramYellow = glCreateProgram();
 
 	//Attaching shaders to program
 	glAttachShader(shaderProgramOrange, vertexShader);
 	glAttachShader(shaderProgramOrange, fragmentShader);
 	glLinkProgram(shaderProgramOrange);
 
-	//Now link the extra yellow shader, by overwriting the current fragment shader and then attaching the shader to the yellow program. 
-	glShaderSource(fragmentShader, 1, &fragmentShaderSourceYellow, NULL);
-	glCompileShader(fragmentShader);
-
-	glAttachShader(shaderProgramYellow, vertexShader);
-	glAttachShader(shaderProgramYellow, fragmentShader);
-	glLinkProgram(shaderProgramYellow);
-
-
 	//Can delete shader objects after they are linked
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
 	float triangleVertices[] = {
-		-0.6f, 0.0f, 0.0f,
-		-0.35f, 0.5f, 0.0f,
-		-0.1f, 0.0f, 0.0f
+		-0.5f, -0.5f, 0.0f,
+		 0.5f,-0.5f, 0.0f,
+		 0.0f, 0.5f, 0.0f
 	};
 
-	float triangleVertices2[] = {
-		 0.1f, 0.0f, 0.0f,
-		 0.35f, 0.5f, 0.0f,
-		 0.60f, 0.0f, 0.0f
-	};
+	unsigned int VBO, VAO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 
-
-	//Exercise 1 - With two different VBOs, we can have 1 VAO but need to swap what is bound to it.
-	unsigned int VBO[2], VAO[2];
-	glGenVertexArrays(2, VAO);
-	glGenBuffers(2, VBO);
-
-	glBindVertexArray(VAO[0]);
+	glBindVertexArray(VAO);
 
 	//Bind Buffers to data next
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 
-	glBindVertexArray(VAO[1]);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices2), triangleVertices2, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -130,19 +100,9 @@ int main(void)
 
 		glUseProgram(shaderProgramOrange);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
 
-		//Exercise 3: One orange and one yellow triangle.
-		glBindVertexArray(VAO[0]);
+		glBindVertexArray(VAO);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		glBindVertexArray(0);
-
-		glUseProgram(shaderProgramYellow);
-
-		glBindVertexArray(VAO[1]);
-
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO); 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glBindVertexArray(0);
@@ -152,10 +112,9 @@ int main(void)
 	}
 
 	//Clear up
-	glDeleteVertexArrays(1, VAO);
-	glDeleteBuffers(1, VBO);
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgramOrange);
-	glDeleteProgram(shaderProgramYellow);
 
 	glfwTerminate();
 	return 0; 
