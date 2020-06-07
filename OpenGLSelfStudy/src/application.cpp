@@ -33,6 +33,7 @@ int main(void)
 	glfwSetFramebufferSizeCallback(window, adjustViewportToWindowSize);		//Viewport needs to be resized everytime user resizes window, this is done using a callback. 
 
 	Shader firstShader("shaders/shader.vs", "shaders/shader.fs");
+	
 
 	float triangleVertices[] = {
 		//positions vec 4		//colours rgb vec 3
@@ -69,7 +70,11 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
 		//glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
+		
 		firstShader.use();
+		float offset = 0.5f;
+		firstShader.setFloat("xOffset", offset);
+
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
