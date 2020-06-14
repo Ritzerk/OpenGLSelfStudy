@@ -76,7 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)OpenGLSelfStudy\res;C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,7 +86,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)OpenGLSelfStudy\res;C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\wkazm\Documents\OpenGLProjects\Dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -155,7 +155,12 @@
     <ClCompile Include="src\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="res\stb_image.h" />
     <ClInclude Include="src\Shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\awesomeface.png" />
+    <Image Include="res\container.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
