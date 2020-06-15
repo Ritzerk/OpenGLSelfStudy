@@ -93,8 +93,7 @@ int main(void)
 
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char* txtjpg = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
-	std::cout << stbi_failure_reason() << std::endl;
+	unsigned char* txtjpg = stbi_load("./res/container.jpg", &width, &height, &nrChannels, 0);
 
 	if (txtjpg)
 	{
@@ -103,6 +102,7 @@ int main(void)
 	}
 	else
 	{
+		std::cout << stbi_failure_reason() << std::endl;
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
@@ -118,7 +118,7 @@ int main(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   //Linear as we don't use mipmap when upscailing. 
 
 
-	unsigned char* data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load("./res/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -126,6 +126,7 @@ int main(void)
 	}
 	else 
 	{
+		std::cout << stbi_failure_reason() << std::endl;
 		std::cout << "Failed to load texture" << std::endl;
 	}
 

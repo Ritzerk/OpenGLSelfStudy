@@ -10,5 +10,5 @@ uniform sampler2D texture2;
 void main()
 {
 	//FragColour = texture(ourTexture, TxtCoord) * vec4(ourColour, 1.0); //texture function links texture coordinates to the sampler
-	FragColour = mix(texture(texture1, TxtCoord), texture(texture2, TxtCoord), 0.2);
+	FragColour = mix(texture(texture1, TxtCoord), texture(texture2, vec2(1.0 - TxtCoord.x, TxtCoord.y)), 0.2);
 }
