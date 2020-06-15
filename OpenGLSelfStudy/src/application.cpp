@@ -10,6 +10,7 @@
 
 void adjustViewportToWindowSize(GLFWwindow* window, int width, int height);
 void checkEsc(GLFWwindow* window);
+void processInput(GLFWwindow* window, float &val);
 
 int main(void)
 {
@@ -45,10 +46,10 @@ int main(void)
 
 	float triangleVertices[] = {
 		//positions vec 4		//colours rgb vec 3		//texture coords
-		 0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,		0.55f, 0.55f,		//top right
-		 0.5f, -0.5f, 0.0f,	    0.0f, 1.0f, 0.0f,		0.55f, 0.45f,		//bottom right
-		-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,		0.45f, 0.45f,		//bottom left
-		-0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,		0.45f, 0.55f		//top left
+		 0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,		1.0f, 1.0f,		//top right
+		 0.5f, -0.5f, 0.0f,	    0.0f, 1.0f, 0.0f,		1.0f, 0.0f,		//bottom right
+		-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		//bottom left
+		-0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,		0.0f, 1.0f		//top left
 	}; 
 
 	unsigned int indices[] = {
@@ -139,18 +140,24 @@ int main(void)
 	firstShader.setInt("texture2", 1);
 
 	glBindVertexArray(0);
-	
+	char c;
+	float visibility = 1.0f;
+	firstShader.setFloat("myVariation", visibility);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		checkEsc(window);	
+		processInput(window, visibility);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
 		//glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
 		
+		
+
 		firstShader.use();
+		firstShader.setFloat("myVariation", visibility);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -159,6 +166,8 @@ int main(void)
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
+
+		
 
 		glBindVertexArray(0);
 
@@ -184,4 +193,22 @@ void checkEsc(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+}
+
+void processInput(GLFWwindow *window, float &val) 
+{
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) 
+	{
+		val += 0.001f;
+		if (val >= 1.0f) {
+			val = 1.0f;
+		}
+	}
+	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) 
+	{
+		val -= 0.001f;
+		if (val <= 0.0f) {
+			val = 0.0f;
+		}
+	}
 }
