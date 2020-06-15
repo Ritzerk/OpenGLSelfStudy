@@ -45,10 +45,10 @@ int main(void)
 
 	float triangleVertices[] = {
 		//positions vec 4		//colours rgb vec 3		//texture coords
-		 0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,		2.0f, 2.0f,		//top right
-		 0.5f, -0.5f, 0.0f,	    0.0f, 1.0f, 0.0f,		2.0f, 0.0f,		//bottom right
-		-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		//bottom left
-		-0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,		0.0f, 2.0f		//top left
+		 0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,		0.55f, 0.55f,		//top right
+		 0.5f, -0.5f, 0.0f,	    0.0f, 1.0f, 0.0f,		0.55f, 0.45f,		//bottom right
+		-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,		0.45f, 0.45f,		//bottom left
+		-0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,		0.45f, 0.55f		//top left
 	}; 
 
 	unsigned int indices[] = {
@@ -114,8 +114,8 @@ int main(void)
 	//Set the texture wrapping/filtering options on the currently bound texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);		//Repeats texture where the object is bigger than texture
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	//Linear for downscailing images - the returned colour of pixel is a mix (interpolated) value of colours, if we are downscailing, then we can't show every single pixel on the image inside the object.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   //Linear as we don't use mipmap when upscailing. 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);	//Linear for downscailing images - the returned colour of pixel is a mix (interpolated) value of colours, if we are downscailing, then we can't show every single pixel on the image inside the object.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);   //Linear as we don't use mipmap when upscailing. 
 
 
 	unsigned char* data = stbi_load("./res/awesomeface.png", &width, &height, &nrChannels, 0);
