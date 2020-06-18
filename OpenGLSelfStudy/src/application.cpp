@@ -153,7 +153,7 @@ int main(void)
 
 	//Scailing and rotating the container object
 	trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
-	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
+	trans = glm::scale(trans, glm::vec3(0.2, 0.2, 0.2)); //scailing - making it be 0.5 of its normal size
 
 	unsigned int transformLoc = glGetUniformLocation(firstShader.programID, "transformation");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
@@ -165,6 +165,8 @@ int main(void)
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
+
+		
 
 		firstShader.use();
 		firstShader.setFloat("myVariation", visibility);
