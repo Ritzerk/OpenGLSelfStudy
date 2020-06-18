@@ -146,17 +146,19 @@ int main(void)
 	float visibility = 1.0f;
 
 	glm::mat4 identityMatrix = glm::mat4(1.0f); //this creates an identity matrix
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); //this is our vector we want to apply a translation to
-	glm::mat4 trans = glm::translate(identityMatrix, glm::vec3(1.0f, 1.0f, 0.0f));  //Identity matrix + Translation vec3, creates the translation matrix (movement). vec3 is the Tx, Ty, Tz
-	vec = trans * vec;   //We multiply matrix by vector(in that order!)
-	std::cout << vec.x << vec.y << vec.z << std::endl; 
+	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); //this is our vector we want to apply a translation to
+	//glm::mat4 trans = glm::translate(identityMatrix, glm::vec3(1.0f, 1.0f, 0.0f));  //Identity matrix + Translation vec3, creates the translation matrix (movement). vec3 is the Tx, Ty, Tz
+	//vec = trans * vec;   //We multiply matrix by vector(in that order!)
+	//std::cout << vec.x << vec.y << vec.z << std::endl; 
 
 	//Scailing and rotating the container object
-	trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
-	trans = glm::scale(trans, glm::vec3(0.2, 0.2, 0.2)); //scailing - making it be 0.5 of its normal size
+	glm::mat4 trans;
+	
+	//trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
+	
+	
 
 	unsigned int transformLoc = glGetUniformLocation(firstShader.programID, "transformation");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -166,7 +168,12 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
-		
+		trans = glm::translate(identityMatrix, glm::vec3(0.5f, -0.5f, 0.0f));   //movement xy.
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); //rotation in z with time
+		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
+
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+		//Order here will be important - apply scailing first, then rotations, and then translations from right to left (bottom command to top command)
 
 		firstShader.use();
 		firstShader.setFloat("myVariation", visibility);
