@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -73,11 +76,11 @@ int main(void)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//Do the same for colour
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
-	glEnableVertexAttribArray(1);
+	//Do the same for colour - not using colour atm
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
+	//glEnableVertexAttribArray(1);
 
-	//Do the same for texture
+	//Do the same for texture - keep it at location 2 stil here and at the shader
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
@@ -140,9 +143,20 @@ int main(void)
 	firstShader.setInt("texture2", 1);
 
 	glBindVertexArray(0);
-	char c;
 	float visibility = 1.0f;
-	firstShader.setFloat("myVariation", visibility);
+
+	glm::mat4 identityMatrix = glm::mat4(1.0f); //this creates an identity matrix
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); //this is our vector we want to apply a translation to
+	glm::mat4 trans = glm::translate(identityMatrix, glm::vec3(1.0f, 1.0f, 0.0f));  //Identity matrix + Translation vec3, creates the translation matrix (movement). vec3 is the Tx, Ty, Tz
+	vec = trans * vec;   //We multiply matrix by vector(in that order!)
+	std::cout << vec.x << vec.y << vec.z << std::endl; 
+
+	//Scailing and rotating the container object
+	trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
+	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
+
+	unsigned int transformLoc = glGetUniformLocation(firstShader.programID, "transformation");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -151,10 +165,6 @@ int main(void)
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
-
-		//glUseProgram(shaderProgram);				//Every rendering call will have to use this program, hence use the shaders. If no VAO is bound, it has to be bound now.
-		
-		
 
 		firstShader.use();
 		firstShader.setFloat("myVariation", visibility);
@@ -166,8 +176,6 @@ int main(void)
 
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
-
-		
 
 		glBindVertexArray(0);
 
