@@ -168,9 +168,10 @@ int main(void)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
 
-		trans = glm::translate(identityMatrix, glm::vec3(0.5f, -0.5f, 0.0f));   //movement xy.
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); //rotation in z with time
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
+		trans = glm::rotate(identityMatrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); //rotation in z with time
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));   //movement xy.
+		
+		//trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
 
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 		//Order here will be important - apply scailing first, then rotations, and then translations from right to left (bottom command to top command)
