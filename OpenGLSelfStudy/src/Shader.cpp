@@ -121,3 +121,8 @@
 	{
 		glUniform1f(glGetUniformLocation(programID, name.c_str()), value);
 	}
+
+	void Shader::setMatrix4fv(const std::string& name, float* value) const
+	{
+		glUniformMatrix4fv(glGetUniformLocation(programID, name.c_str()), 1, GL_FALSE, value);
+	}

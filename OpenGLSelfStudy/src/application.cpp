@@ -157,9 +157,18 @@ int main(void)
 	
 	//trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
 	
-	
+	glm::mat4 model = glm::rotate(identityMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 view = glm::translate(identityMatrix, glm::vec3(0.0f,0.0f, -3.0f));
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
+
+	//int modelLoc = glGetUniformLocation(firstShader.programID, "model");
+	firstShader.setMatrix4fv("model", glm::value_ptr(model));
+	firstShader.setMatrix4fv("view", glm::value_ptr(view));
+	firstShader.setMatrix4fv("projection", glm::value_ptr(projection));
 
 	unsigned int transformLoc = glGetUniformLocation(firstShader.programID, "transformation");
+
+	glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
 
 	while (!glfwWindowShouldClose(window))
 	{
