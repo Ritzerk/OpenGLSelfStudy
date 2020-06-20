@@ -41,49 +41,84 @@ int main(void)
 	glViewport(0, 0, 800, 600);	//size of GL rendering window. 
 	glfwSetFramebufferSizeCallback(window, adjustViewportToWindowSize);		//Viewport needs to be resized everytime user resizes window, this is done using a callback. 
 
-	
-
-	
+	glEnable(GL_DEPTH_TEST);
 
 	Shader firstShader("shaders/shader.vs", "shaders/shader.fs");
-	
 
-	float triangleVertices[] = {
-		//positions vec 4		//colours rgb vec 3		//texture coords
-		 0.5f,  0.5f, 0.0f,     1.0f, 0.0f, 0.0f,		1.0f, 1.0f,		//top right
-		 0.5f, -0.5f, 0.0f,	    0.0f, 1.0f, 0.0f,		1.0f, 0.0f,		//bottom right
-		-0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		//bottom left
-		-0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,		0.0f, 1.0f		//top left
-	}; 
+	float vertices3D[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-	unsigned int indices[] = {
-		0,1,3,
-		1,2,3
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	unsigned int VBO, VAO, EBO;
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
 
 	//Bind Buffers to data next
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3D), vertices3D, GL_STATIC_DRAW);
+	
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	//Do the same for colour - not using colour atm
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
-	//glEnableVertexAttribArray(1);
-
 	//Do the same for texture - keep it at location 2 stil here and at the shader
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 	
 	unsigned int texture1, texture2;
 	glGenTextures(1, &texture1);
@@ -140,69 +175,55 @@ int main(void)
 	
 
 	firstShader.use();
-	glUniform1i(glGetUniformLocation(firstShader.programID, "texture1"), 0);
+	firstShader.setInt("texture1", 0); //glUniform1i(glGetUniformLocation(firstShader.programID, "texture1"), 0);
 	firstShader.setInt("texture2", 1);
 
-	glBindVertexArray(0);
-	float visibility = 1.0f;
+
+	//float visibility = 1.0f;
 
 	glm::mat4 identityMatrix = glm::mat4(1.0f); //this creates an identity matrix
-	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); //this is our vector we want to apply a translation to
-	//glm::mat4 trans = glm::translate(identityMatrix, glm::vec3(1.0f, 1.0f, 0.0f));  //Identity matrix + Translation vec3, creates the translation matrix (movement). vec3 is the Tx, Ty, Tz
-	//vec = trans * vec;   //We multiply matrix by vector(in that order!)
-	//std::cout << vec.x << vec.y << vec.z << std::endl; 
-
-	//Scailing and rotating the container object
-	glm::mat4 trans;
 	
-	//trans = glm::rotate(identityMatrix, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0)); //rotating around Z (z is 1 in vec3) by 90 degrees (we convert to radians using glm::radians)
-	
-	glm::mat4 model = glm::rotate(identityMatrix, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 view = glm::translate(identityMatrix, glm::vec3(0.0f,0.0f, -3.0f));
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f/600.0f, 0.1f, 100.0f);
-
-	//int modelLoc = glGetUniformLocation(firstShader.programID, "model");
-	firstShader.setMatrix4fv("model", glm::value_ptr(model));
-	firstShader.setMatrix4fv("view", glm::value_ptr(view));
-	firstShader.setMatrix4fv("projection", glm::value_ptr(projection));
-
-	unsigned int transformLoc = glGetUniformLocation(firstShader.programID, "transformation");
-
-	glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 100.0f);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		checkEsc(window);	
-		processInput(window, visibility);
+		//processInput(window, visibility);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);				//calling glClear sets the background to color values set by glClearColor function.
-
-		trans = glm::translate(identityMatrix, glm::vec3(0.5f, -0.5f, 0.0f));   //movement xy.
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f)); //rotation in z with time
-		trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5)); //scailing - making it be 0.5 of its normal size
-
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-		//Order here will be important - apply scailing first, then rotations, and then translations from right to left (bottom command to top command)
-
-		firstShader.use();
-		firstShader.setFloat("myVariation", visibility);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    //calling glClear sets the background to color values set by glClearColor function.
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
+		firstShader.use();
+
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		//create transformations for how we see the objects
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		
+
+		firstShader.setMatrix4fv("projection", glm::value_ptr(projection));
+		firstShader.setMatrix4fv("view", glm::value_ptr(view));
+
+		//render multiple boxes
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			firstShader.setMatrix4fv("model", glm::value_ptr(model));
 
-		float sintime = sin(glfwGetTime());
-		//Second Container - exercise 2
-		trans = glm::translate(identityMatrix, glm::vec3(-0.5f, 0.5f, 0.0f));
-		trans = glm::scale(trans, glm::vec3(sintime, sintime, sintime));
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &trans[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		
+		//firstShader.setFloat("myVariation", visibility);
 
 		glBindVertexArray(0);
 
