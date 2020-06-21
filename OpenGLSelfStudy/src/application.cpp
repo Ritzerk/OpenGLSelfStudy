@@ -46,47 +46,47 @@ int main(void)
 	Shader firstShader("shaders/shader.vs", "shaders/shader.fs");
 
 	float vertices3D[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,      0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,      1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,      1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,      1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,      0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,      0.0f, 0.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,     0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,     1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,     0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,     0.0f, 0.0f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,     1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,     0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,     1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,     0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,     1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,     1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,     1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,     0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,     0.0f, 1.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-0.5f,  0.5f, -0.5f,     0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,     1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,     1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,     0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,     0.0f, 1.0f
 	};
 
 	glm::vec3 cubePositions[] = {
@@ -179,7 +179,7 @@ int main(void)
 	firstShader.setInt("texture2", 1);
 
 
-	//float visibility = 1.0f;
+	float visibility = 1.0f;
 
 	glm::mat4 identityMatrix = glm::mat4(1.0f); //this creates an identity matrix
 	
@@ -187,7 +187,7 @@ int main(void)
 	while (!glfwWindowShouldClose(window))
 	{
 		checkEsc(window);	
-		//processInput(window, visibility);
+		processInput(window, visibility);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    //calling glClear sets the background to color values set by glClearColor function.
@@ -215,15 +215,16 @@ int main(void)
 		{
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
+			//model = glm::rotate(model, sin(glm::radians(-55.0f)), glm::vec3(1.0f, 0.0f, 0.0f) );
 			float angle = 20.0f * i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			model = glm::rotate(model, (float)glfwGetTime()*glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			firstShader.setMatrix4fv("model", glm::value_ptr(model));
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
 		
-		//firstShader.setFloat("myVariation", visibility);
+		firstShader.setFloat("myVariation", visibility);
 
 		glBindVertexArray(0);
 
